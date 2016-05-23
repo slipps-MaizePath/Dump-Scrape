@@ -1,4 +1,4 @@
-# Collect issues and assorted information from a github page and return it in a Django-readable format
+# Collects issues and assorted information from a github page and return it in a Django-readable format
 from github3 import login
 from webapp import settings
 from datetime import datetime
