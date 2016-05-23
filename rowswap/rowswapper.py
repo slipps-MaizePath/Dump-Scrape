@@ -46,11 +46,9 @@ def swap_rows(indices, output):
     ws = wb['dbo_row_sheanlin_revision']
 
     for list in indices:
-        print list
-
         for pair in list:
             # Swapping the values
-            print 'Swapping: [', pair[0], ':',ws[pair[0]].value, '] and [', pair[1], ':', ws[pair[1]].value, ']'
+            print 'Swapping: [', pair[0], ':', ws[pair[0]].value, '] and [', pair[1], ':', ws[pair[1]].value, ']'
             row_a = ws[pair[0]].value
             row_b = ws[pair[1]].value
 
@@ -69,12 +67,11 @@ indices_c = get_index(2373, 2422)
 indices_d = get_index(2749, 2798)
 indices_e = get_index(2443, 2492)
 indices_f = get_index(2557, 2606)
-
 indices_g = get_index(2671, 2704)
 
 swap_rows(
     (indices_a, indices_b, indices_c, indices_d, indices_e, indices_f, indices_g),
-    "output.xlsx"
+    "dbo_row_sl_revision5-23-2016.xlsx"
 )
 
 
