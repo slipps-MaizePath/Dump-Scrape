@@ -82,4 +82,4 @@ def generate_coords(max_row, max_range, start_range, start_row):
 
 if __name__ == '__main__':
     file_name, csvfile, max_row, max_range = argv
-    populate('sample_RCBD.csv', int(max_row), int(max_range))
+    populate(csvfile, int(max_row), int(max_range))
