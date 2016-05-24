@@ -3,10 +3,14 @@
 import pandas
 from sys import argv
 from os import getcwd
+import csv
 
-key_csv = argv
 
-def generate_map(key_csv):
+def generate_map(key_csv, rows=150):
+    """
+    :param key_csv: A pre-formatted CSV containing field and stock information.
+    :return: CSV formatted field maps representing the lay out of the intended plots as well as their contents.
+    """
     dborow = pandas.read_csv(key_csv, delimiter=',')
     field_set = set(dborow.get(key='Field_Name'))  # field_set contains all Field_Names listed in the passed CSV
 
@@ -16,15 +20,59 @@ def generate_map(key_csv):
 
         field_df = dborow.query(query_string)  # Subsetting data
         field_df = field_df.pivot(index='Row', columns='Range', values='Row_ID')  # Making the map
-        # field_df_passes = pandas.concat([field_df, passes], axis=1)  # Appending pass axes
         field_df.to_csv(file_string, sep=',')  # Outputting data
+        add_rows(file_string, rows)  # Adding row and pass data to csv
 
-        print('{2}\nGenerating map for field: {0}\nOutput at: {1}{0}'.format(
-            file_string, getcwd(), '-'*20
+        print('{2}\nGenerated map for field: {0}\nOutput at: {1}{0}'.format(
+            file_string, getcwd(), '-' * 20
         ))
-'dogs'
+
+
+def add_rows(raw_csv, rows):
+    """
+    :param raw_csv: CSV processed by generate_map but without row and pass information.
+    :param rows: Number of rows in the plot. It's fine to overshoot.
+    :return: CSV with row and pass information.
+    """
+    passes = generate_passes(rows)
+    range_list = list(range(2,150))
+
+    with open(raw_csv, 'r') as csvinput:
+        with open('processed-' + raw_csv , 'w') as csvoutput:
+            writer = csv.writer(csvoutput)
+            for row in csv.reader(csvinput):
+                if row[0] == 'Row':
+                    writer.writerow(['Row'] + range_list[0: len(row)-1] + ['Row', 'Pass'])
+                else:
+                    writer.writerow(row + [row[0], passes[int(row[0])]])
+
+    return 0
+
+
+def generate_passes(rows):
+    """
+    :param rows: Number of rows in the field.
+    :return: Tuple containing an appropriate length set of paired (row, pass) indices.
+    """
+    digit_a = 1
+    digit_b = 1
+    row = 1
+    passes = {"Row": "Pass"}
+
+    while len(passes) < rows:
+        pass_string = "{0}.{1}".format(digit_a, digit_b)
+        if digit_b % 4 == 0:
+            digit_b = 0
+            digit_a += 1
+        passes[row] = pass_string
+        digit_b += 1
+        row += 1
+
+    return passes
+
 
 if __name__ == "__main__":
-    # generate_map(key_csv='dbo_row_sl_revision5-23-2016.csv')
-    generate_map(key_csv=str(key_csv))
+    file_name, key_csv = argv
+    generate_map(key_csv)
+
 
