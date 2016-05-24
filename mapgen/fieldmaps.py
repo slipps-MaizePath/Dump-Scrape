@@ -22,7 +22,7 @@ def generate_map(key_csv):
         print('{2}\nGenerating map for field: {0}\nOutput at: {1}{0}'.format(
             file_string, getcwd(), '-'*20
         ))
-
+'dogs'
 
 if __name__ == "__main__":
     # generate_map(key_csv='dbo_row_sl_revision5-23-2016.csv')
