@@ -23,8 +23,8 @@ def generate_map(key_csv, rows=150):
         field_df.to_csv(file_string, sep=',')  # Outputting data
         add_rows(file_string, rows)  # Adding row and pass data to csv
 
-        print('{2}\nGenerated map for field: {0}\nOutput at: {1}{0}'.format(
-            file_string, getcwd(), '-' * 20
+        print('{2}\nGenerated map for field: {0}\nOutput at: {1}/{0}'.format(
+            'processed-' + file_string, getcwd(), '-' * 20
         ))
 
 
