@@ -36,7 +36,8 @@ def add_rows(raw_csv, rows):
     :param rows: Number of rows in the plot. It's fine to overshoot.
     :return: CSV with row and pass information.
     """
-    passes = generate_pass_dict(rows)
+    passes = generate_passes(rows)
+    pass_index = 0
     range_list = list(range(2,150))
 
     with open(raw_csv, 'r') as csvinput:
@@ -44,26 +45,26 @@ def add_rows(raw_csv, rows):
             writer = csv.writer(csvoutput)
             for row in csv.reader(csvinput):
                 if row[0] == 'Row':
-                    writer.writerow(['Row'] + range_list[0: len(row)-1] + ['Row', 'Pass'])
+                    writer.writerow(['Row'] + range_list[0:len(row)-1] + ['Row', 'Pass'])
                 else:
-                    writer.writerow(row + [row[0], passes[int(row[0])]])
+                    writer.writerow(row + [row[0], passes[pass_index]])
+                    pass_index += 1
 
     return 0
 
 
-def generate_pass_dict(rows):
+def generate_passes(rows):
     """
     :param rows: Number of rows in the field.
     :return: Tuple containing an appropriate length set of paired (row, pass) indices.
     """
-    digit_a = 0
-    digit_b = 4
-    row = 0
-    passes = {"Row": "Pass"}
+    digit_a = 1
+    digit_b = 1
+    passes = ()
     increment = True
 
     while len(passes) < rows:
-        passes[row] = "{0}.{1}".format(digit_a, digit_b)
+        passes += ("{0}.{1}".format(digit_a, digit_b),)
 
         if increment:
             digit_b += 1
@@ -78,12 +79,11 @@ def generate_pass_dict(rows):
             increment = True
             digit_b += 1
             digit_a += 1
-        row += 1
-    
+
     return passes
 
 
 if __name__ == "__main__":
     file_name, key_csv = argv
     generate_map(key_csv)
-
+    # print(generate_passes(200))
