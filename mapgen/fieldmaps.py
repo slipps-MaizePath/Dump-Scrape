@@ -27,6 +27,8 @@ def generate_map(key_csv, rows=150):
             'processed-' + file_string, getcwd(), '-' * 20
         ))
 
+    return 0
+
 
 def add_rows(raw_csv, rows):
     """
@@ -34,7 +36,7 @@ def add_rows(raw_csv, rows):
     :param rows: Number of rows in the plot. It's fine to overshoot.
     :return: CSV with row and pass information.
     """
-    passes = generate_passes(rows)
+    passes = generate_pass_dict(rows)
     range_list = list(range(2,150))
 
     with open(raw_csv, 'r') as csvinput:
@@ -49,30 +51,39 @@ def add_rows(raw_csv, rows):
     return 0
 
 
-def generate_passes(rows):
+def generate_pass_dict(rows):
     """
     :param rows: Number of rows in the field.
     :return: Tuple containing an appropriate length set of paired (row, pass) indices.
     """
-    digit_a = 1
-    digit_b = 1
-    row = 1
+    digit_a = 0
+    digit_b = 4
+    row = 0
     passes = {"Row": "Pass"}
+    increment = True
 
     while len(passes) < rows:
-        pass_string = "{0}.{1}".format(digit_a, digit_b)
-        if digit_b % 4 == 0:
-            digit_b = 0
-            digit_a += 1
-        passes[row] = pass_string
-        digit_b += 1
-        row += 1
+        passes[row] = "{0}.{1}".format(digit_a, digit_b)
 
+        if increment:
+            digit_b += 1
+        else:
+            digit_b -= 1
+
+        if digit_b > 4:
+            increment = False
+            digit_b -= 1
+            digit_a += 1
+        if digit_b < 1:
+            increment = True
+            digit_b += 1
+            digit_a += 1
+        row += 1
+    
     return passes
 
 
 if __name__ == "__main__":
     file_name, key_csv = argv
     generate_map(key_csv)
-
 
