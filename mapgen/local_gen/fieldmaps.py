@@ -19,7 +19,7 @@ def generate_map(key_csv, rows=150):
         file_string = 'fieldmap[{0}].csv'.format(field)
 
         field_df = dborow.query(query_string)  # Subsetting data
-        field_df = field_df.pivot(index='Row', columns='Range', values='Row_ID')  # Making the map
+        field_df = field_df.pivot(index='Row', columns='Range', values='Plot ID')  # Making the map
         field_df.to_csv(file_string, sep=',')  # Outputting data
         add_rows(file_string, rows)  # Adding row and pass data to csv
 
