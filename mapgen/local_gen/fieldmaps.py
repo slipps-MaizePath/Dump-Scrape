@@ -1,5 +1,6 @@
 # http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html
 # slin63@illinois.edu
+# !!DEPRECATED!! -> Use field_map_gen instead whenever possible.
 import pandas
 from sys import argv
 from os import getcwd

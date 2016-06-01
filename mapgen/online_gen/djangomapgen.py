@@ -2,30 +2,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from applets import field_map_generator
 
+
 @login_required
 def download_field_map(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="selected_experiment_maps.csv"'
-    plot_loader = sort_plot_loader(request)
-    plot_dict = {}
-    rows = []
-    ranges = []
-    experiments = []
-    for obs in plot_loader:
-        plot_id = obs.obs_plot.plot_id
-        row_num = obs.obs_plot.row_num
-        range_num = field_map_generator.number_to_letter(obs.obs_plot.range_num)
-        exp = obs.experiment.name + ': ' + obs.experiment.start_date
+  plot_loader = sort_plot_loader(request)
+  plot_objects = []  # Init: (range, row, experiment, plot_id)
+  for obs in plot_loader:
+    row_num = obs.obs_plot.row_num
+    range_num = field_map_generator._get_column_letter(int(obs.obs_plot.range_num))
 
-        coords = range_num + str(row_num)
-        plot_dict[coords] = plot_id
-        rows.append(int(row_num))
-        ranges.append(range_num)
-        experiments.append(exp)
+    plot_objects.append(field_map_generator.PlotCell(
+       range_num=range_num, row_num=row_num, experiment=obs.experiment, plot_id=obs.obs_plot.plot_id, field=obs.experiment.field)
+    )
 
-    domain = [rows, ranges]
-    info = (plot_dict, domain, set(experiments))
+  wb = field_map_generator.compile_info(plot_objects)
+  response = HttpResponse(save_virtual_workbook(wb), content_type='application/vnd.ms-excel')
+  response['Content-Disposition'] = 'attachment; filename="selected_experiment_maps.xlsx"'
 
-    response = field_map_generator.compile_info(info, response)
-
-    return response
+  return response
