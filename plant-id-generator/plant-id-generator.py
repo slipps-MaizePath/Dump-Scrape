@@ -14,14 +14,13 @@ def generate_plant_dict(csvfile):
 
 
 def output_plant_dict(plant_dict, digits=4, output='output.csv'):
-    digit_string = '0' * int(digits)
+    digit_string = '0' * digits
     with open(output, 'w') as csvoutput:
         writer = csv.DictWriter(csvoutput, fieldnames=['Plant ID'])
         writer.writeheader()
         for plot_id in plant_dict:
             for i in xrange(1, plant_dict[plot_id] + 1):
                 digits_int = len(str(i))
-                print digits_int, digits
                 if int(digits_int) > int(digits):
                     raise OverflowError('Digit argument too low to accomodate number of plants.')
                 else:
@@ -46,7 +45,7 @@ if __name__ == '__main__':
                                                  'new CSV with generated Plant IDs.')
     parser.add_argument('csvfile', metavar='csvfile', type=str, help='Name of csvfile to be processed')
     parser.add_argument('-output', default='output.csv', help='Name given to output csvfile')
-    parser.add_argument('-digits', default=4, help='Number of trailing digits in the plant id')
+    parser.add_argument('-digits', default=4, type=int, help='Number of trailing digits in the plant id')
     args = parser.parse_args()
 
     plant_dict = generate_plant_dict(args.csvfile)
