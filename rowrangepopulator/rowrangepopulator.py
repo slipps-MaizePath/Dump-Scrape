@@ -1,4 +1,3 @@
-# Should we always start from row 5? -- slin63
 # Assuming we start from row 1 range 1 and have a maximum of 5 rows and 5 ranges
 from os import getcwd
 import csv
