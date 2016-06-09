@@ -1,7 +1,7 @@
 from os import getcwd, system
 from sys import argv
 import csv
-
+import argparse
 
 def generate_plant_dict(csvfile):
     with open(csvfile, 'r') as csvinput:
@@ -42,8 +42,14 @@ if __name__ == '__main__':
     ::digits:: Number of trailing digits you want in the plant_id
     ::output:: Name of the output file
     """
-    script, csvfile, digits, output = argv
-    plant_dict = generate_plant_dict(csvfile)
-    output_plant_dict(plant_dict, digits, output)
-    report_output(output)
-    system('open {}'.format(output))
+    parser = argparse.ArgumentParser(description='Process a CSV File with Plot ID and stand count columns into a '
+                                                 'new CSV with generated Plant IDs.')
+    parser.add_argument('csvfile', metavar='csvfile', type=str, help='Name of csvfile to be processed')
+    parser.add_argument('-output', default='output.csv', help='Name given to output csvfile')
+    parser.add_argument('-digits', default=4, help='Number of trailing digits in the plant id')
+    args = parser.parse_args()
+
+    plant_dict = generate_plant_dict(args.csvfile)
+    output_plant_dict(plant_dict, args.digits, args.output)
+    report_output(args.output)
+    system('open {}'.format(args.output))
