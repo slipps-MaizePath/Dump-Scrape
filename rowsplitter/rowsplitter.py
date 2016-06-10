@@ -61,7 +61,6 @@ if __name__ == '__main__':
                                      'into two x.1 x.2 formatted rows.')
     parser.add_argument('csvfile', metavar='csvfile', type=str, help='Name of csvfile to be processed')
     parser.add_argument('-output', default='output.csv', help='Name given to output csvfile')
-    parser.add_argument('-delimiter', default='_', type=str, help='Delimiter')
     args = parser.parse_args()
 
     plot_list = generate_plots(args.csvfile)

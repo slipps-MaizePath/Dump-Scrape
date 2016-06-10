@@ -73,7 +73,7 @@ if __name__ == '__main__':
                                                  'new CSV with generated Plant IDs.')
     parser.add_argument('csvfile', metavar='csvfile', type=str, help='Name of csvfile to be processed')
     parser.add_argument('-output', default='output.csv', help='Name given to output csvfile')
-    parser.add_argument('-digits', default=4, type=int, help='Number of trailing digits in the plant id')
+    parser.add_argument('--digits', default=4, type=int, help='Number of trailing digits in the plant id')
     args = parser.parse_args()
 
     plant_list = generate_plants(args.csvfile)
