@@ -3,30 +3,58 @@ from sys import argv
 import csv
 import argparse
 
-def generate_plant_dict(csvfile):
+class PlantCell(object):
+    def __init__(self, experiment, plot_id, stand_count, comments, plant_id=None):
+        self.experiment = experiment
+        self.plot_id = plot_id
+        self.stand_count = stand_count
+        self.comments = comments
+        self.plant_id = plant_id
+
+    def __repr__(self):
+        return self.plot_id, self.stand_count, self.plant_id
+
+
+def generate_plants(csvfile):
     with open(csvfile, 'r') as csvinput:
         reader = csv.DictReader(csvinput)
-        plant_dict = {}
+        plant_list = []
         for row in reader:
-            plant_dict[row['Plot ID']] = int(row['Stand Count'])
+            if int(row['Stand Count']) == 0:
+                pass
+            else:
+                plant_list.append(
+                    PlantCell(
+                        experiment=row['Experiment'],
+                        plot_id=row['Plot ID'],
+                        stand_count=int(row['Stand Count']),
+                        comments=row['Comments']
+                    )
+                )
 
-    return plant_dict
+    return plant_list
 
 
-def output_plant_dict(plant_dict, digits=4, output='output.csv'):
+def output_plant_csv(plant_list, digits=4, output='output.csv'):
     digit_string = '0' * digits
     with open(output, 'w') as csvoutput:
-        writer = csv.DictWriter(csvoutput, fieldnames=['Plant ID'])
+        writer = csv.DictWriter(csvoutput, fieldnames=['Experiment', 'Plant ID', 'Plot ID', 'Plant Num', 'Comments'])
         writer.writeheader()
-        for plot_id in plant_dict:
-            for i in xrange(1, plant_dict[plot_id] + 1):
+        for plant in plant_list:
+            for i in xrange(1, plant.stand_count + 1):
                 digits_int = len(str(i))
                 if int(digits_int) > int(digits):
-                    raise OverflowError('Digit argument too low to accomodate number of plants.')
+                    raise OverflowError('Digit argument too low to accommodate number of plants.')
                 else:
-                    id = digit_string[:-digits_int] + str(i)
-                    plant_id = plot_id + id
-                    writer.writerow({'Plant ID':plant_id})
+                    id = digit_string[:-digits_int] +  str(i)
+                    plant_id = plant.plot_id + '_' + id
+                    writer.writerow({
+                        'Plant ID': plant_id,
+                        'Experiment': plant.experiment,
+                        'Plot ID': plant.plot_id,
+                        'Plant Num': '',
+                        'Comments': plant.comments
+                    })
 
     return 0
 
@@ -48,7 +76,7 @@ if __name__ == '__main__':
     parser.add_argument('-digits', default=4, type=int, help='Number of trailing digits in the plant id')
     args = parser.parse_args()
 
-    plant_dict = generate_plant_dict(args.csvfile)
-    output_plant_dict(plant_dict, args.digits, args.output)
+    plant_list = generate_plants(args.csvfile)
+    output_plant_csv(plant_list, args.digits, args.output)
     report_output(args.output)
     system('open {}'.format(args.output))
