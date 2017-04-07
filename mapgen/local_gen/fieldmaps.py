@@ -13,14 +13,14 @@ def generate_map(key_csv, rows=150):
     :return: CSV formatted field maps representing the lay out of the intended plots as well as their contents.
     """
     dborow = pandas.read_csv(key_csv, delimiter=',')
-    field_set = set(dborow.get(key='Field_Name'))  # field_set contains all Field_Names listed in the passed CSV
+    field_set = set(dborow.get(key='Field_name'))  # field_set contains all Field_Names listed in the passed CSV
 
     for field in field_set:
-        query_string = 'Field_Name == "{0}"'.format(field)
+        query_string = 'Field_name == "{0}"'.format(field)
         file_string = 'fieldmap[{0}].csv'.format(field)
 
         field_df = dborow.query(query_string)  # Subsetting data
-        field_df = field_df.pivot(index='Row', columns='Range', values='Plot ID')  # Making the map
+        field_df = field_df.pivot(index='Row', columns='Range', values='Plot_ID')  # Making the map
         field_df.to_csv(file_string, sep=',')  # Outputting data
         add_rows(file_string, rows)  # Adding row and pass data to csv
 

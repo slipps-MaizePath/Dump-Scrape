@@ -1,0 +1,1 @@
+can use the local-gen/fieldmaps.py to generate pre-planting maps. 
