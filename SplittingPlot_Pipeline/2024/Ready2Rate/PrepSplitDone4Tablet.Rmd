@@ -1,0 +1,70 @@
+---
+title: "PrepSplitDone4Tablet"
+author: "Sarah Lipps"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+I have all my PlantIDs I just need to merge them with the "Other Stuff" 
+so that my rating files are more informative
+
+Get a named list of all my working dataframes
+```{r}
+library(stringr)
+
+getwd()
+
+#load all my PLANT files individually
+#20241015: Running just for the inoculated trials
+gn.plants <- read.csv("./../SplitDone/24GN2Split.csv_SplitDone.csv", header = T)
+gd.plants <- read.csv("./../SplitDone/24GD2Split.csv_SplitDone.csv", header = T)
+gt.plantts <- read.csv("./../SplitDone/24GT2Split.csv_SplitDone.csv", header = T)
+gm.plants <- read.csv("./../SplitDone/24GM2Split.csv_SplitDone.csv", header = T)
+
+#make these one big dataframe
+#note to self...next time work solely with one large dataframe
+all.plants <- do.call(rbind, list(gn.plants, gd.plants, gt.plantts, gm.plants))
+
+nrow(gn.plants) + nrow(gd.plants) + nrow(gt.plantts) + nrow(gm.plants) == nrow(all.plants)
+```
+
+
+Get mega dataframe of what I want to merge each dataframe with
+```{r, warning=FALSE}
+library(data.table)
+#upload everything
+all.inoc <- fread("./../2024GER_All-Inoc.csv",
+                  select = c("Plot_ID", "Source_Seed_ID", "Field_name", "Pedigree", "Plot_Name", "Row", "Range", "Plot", "Block", "Rep"))
+
+#formatt everything
+truenames <- c("Plot.ID", "Source.Stock", "Field", "Pedigree", "Plot.Name", "Row", "Range", "Plot", "Block", "Rep")
+colnames(all.inoc) <- truenames
+```
+
+merge everything
+```{r}
+#inoculated trials
+new <- merge(all.plants, all.inoc, all.x = T, all.y = F)
+```
+
+split em
+```{r}
+#parse out big df into the smaller dfs
+my.envs <- unique(new$Experiment)
+for (i in seq_along(my.envs)) {
+  assign(paste0('ger', my.envs[i]), subset(new, Experiment == my.envs[i]))
+}
+```
+
+save em
+```{r}
+#getwd()
+write.csv(ger24GD, "./24GD_Ready2Rate.csv", row.names = F)
+write.csv(ger24GM, "./24GM_Ready2Rate.csv", row.names = F)
+write.csv(ger24GN, "./24GN_Ready2Rate.csv", row.names = F)
+write.csv(ger24GT, "./24GT_Ready2Rate.csv", row.names = F)
+
+warnings()
+```
+
+

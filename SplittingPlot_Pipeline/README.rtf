@@ -1,0 +1,40 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh12580\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 #README for Converting Plot Data to Plant Data\
+#Sarah Lipps\
+#2024-10-16\
+\
+I truly am uncertain how many people will truly be using this in the future. \
+But I have spent an immense amount of time suffering through this pipeline.\
+So hopefully no other student will have to suffer through\
+\
+Architecture of folder org:\
+ ~/splitting_plots/2024/ToSplit\
+~/splitting_plots/2024/SplitDone\
+~/splitting_plots/run-id-generator.sh\
+\
+1. Create a \'93ToSplit\'94 folder. This will contain any files to split into plant data. Make sure a copy of \'93plant-id-generator.py\'94 is in the ToSplit folder.\
+\
+2. Create a \'93SplitDone\'94 folder. This folder should be empty.\
+\
+3. Run \'93run-id-generator.sh.\'94 Make sure that it is directing to the appropriate folders. This shell script splits the plots, then adjusts the name to something more readable. I hate when outputs give you stupid names.\
+\
+4. Create \'93Ready2Rate\'94 Folder\
+\
+5. Place copy of PrepSplitDone4Table.rmd into Ready2Rate. This combines the SplitDone output files with the OG duo file to create a plant file that is nearly ready for database upload and to use on the Galaxy Tablets.\
+\
+####################################################################################\
+################Bluetooth Share Files to Tablet using MacOS ###############################\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 ####################################################################################\
+\
+Go to Finder/Applications/Utilities/Bluetooth File Exchange\
+Select the files you want to send to the tablet\
+Select the tablet\
+With the tablet screen unlocked, hit accept when the file share notification pops up\
+All your files should be in the \'93Download\'94 folder on the tablet.}
